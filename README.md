@@ -31,6 +31,41 @@ applications, we build a high-quality raw image dataset SenseNoise-500 that cont
 500 real-life scenes. The dataset can serve as a strong benchmark for better evaluating raw image 
 denoising.
 
-### Code & Dataset
+### Testing
+The code has been tested with the following environment:
+```
+pytorch == 1.5.0
+bm3d == 3.0.7
+scipy == 1.4.1 
+```
+    
+- Prepare the datasets. (kodak | BSDS300 | BSD68)
+- Download the [pretrained models](https://mycuhk-my.sharepoint.com/:f:/g/personal/1155135732_link_cuhk_edu_hk/Ep0gRwX0hIFKvOSiq5x1QbsBfSmGma1CNxQ8LeMiE93wEw?e=dJxcx3)
+ and put them into the checkpoint folder.
+- Modify the data root path and noise type (gaussian | gaussian_gray | line | binomial | impulse | pattern).
+```
+python -u test.py --root your_data_root --ntype gaussian 
+```
+
+### Training code & Dataset
 
 coming soon ！
+
+
+### Citation
+``` bibtex
+@article{,
+     title={Self-Supervised Image Denoising via Iterative Data Refinement},
+     author={Zhang, Yi and Li, Dasong and Law, Ka Lung and Wang, Xiaogang and Qin, Hongwei and Li, Hongsheng},
+     journal={arXiv:2111.14358},
+     year={2021}
+}
+```
+
+### Contact
+Feel free to contact zhangyi@link.cuhk.edu.hk if you have any questions.
+
+### Acknowledgments
+* [N2N](https://github.com/NVlabs/noise2noise)
+* [N2V](https://github.com/juglab/n2v)
+* [bm3d](https://pypi.org/project/bm3d/)
