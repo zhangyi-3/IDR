@@ -1,4 +1,4 @@
-[Self-Supervised Image Denoising via Iterative Data Refinement](http://arxiv.org/abs/2111.14358)
+[IDR: Self-Supervised Image Denoising via Iterative Data Refinement](http://arxiv.org/abs/2111.14358)
 ---
 [Yi Zhang](https://zhangyi-3.github.io/)<sup>1</sup>,
 [Dasong Li]()<sup>1</sup>,
@@ -47,18 +47,25 @@ scipy == 1.4.1
 python -u test.py --root your_data_root --ntype gaussian 
 ```
 
-### Training code & Dataset
+### SenseNoise dataset
+[Download](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155135732_link_cuhk_edu_hk/ER9Zn20NM5JCs2LtWnJjS88BOnuSOIl69EGvpdUe7t3BIw?e=r0LtAy)
+
+The released dataset is what we used in our paper. 
+Thanks to the advice from the anonymous reviewers, we are still working on improving the quality of the dataset.
+
+
+### Training code
 
 coming soon ！
 
 
 ### Citation
 ``` bibtex
-@article{zhang2021IDR,
-     title={Self-Supervised Image Denoising via Iterative Data Refinement},
-     author={Zhang, Yi and Li, Dasong and Law, Ka Lung and Wang, Xiaogang and Qin, Hongwei and Li, Hongsheng},
-     journal={arXiv:2111.14358},
-     year={2021}
+@inproceedings{zhang2021IDR,
+      title={IDR: Self-Supervised Image Denoising via Iterative Data Refinement},
+      author={Zhang, Yi and Li, Dasong and Law, Ka Lung and Wang, Xiaogang and Qin, Hongwei and Li, Hongsheng},
+      booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+      year={2022}
 }
 ```
 
