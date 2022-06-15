@@ -75,7 +75,7 @@ def generateConfig(pre_name, cons, init_cfg):
 
 
 idr_config = yaml2edict('./configs/IDR.yaml')
-name = 'idr'
+name = 'idr-g'
 generateConfig(name, {
-    'temp': None
+    'noise_type': 'g'
 }, idr_config)

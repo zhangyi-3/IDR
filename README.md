@@ -55,8 +55,10 @@ Thanks to the advice from the anonymous reviewers, we are still working on impro
 
 
 ### Training code
-
-coming soon ！
+Slurm Training for gaussian denoising
+```
+sh run_slurm.sh -n idr-g
+```
 
 
 ### Citation

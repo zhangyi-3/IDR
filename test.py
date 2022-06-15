@@ -1,6 +1,3 @@
-import os
-import cv2
-import torch
 import argparse
 
 import torch.nn.functional as F
@@ -9,7 +6,8 @@ from skimage.metrics import peak_signal_noise_ratio as compare_psnr
 from skimage.metrics import structural_similarity as compare_ssim
 
 from utils import *
-from model import UNet_n2n_un
+# from models import UNet_n2n_un
+from models import build_model
 
 
 def model_forward(net, noisy, padding=32):
@@ -156,7 +154,12 @@ if __name__ == '__main__':
 
     # model
     ch = 1 if 'gray' in args.ntype else 3
-    net = UNet_n2n_un(in_channels=ch, out_channels=ch)
+    # net = UNet_n2n_un(in_channels=ch, out_channels=ch)
+    cfg = EasyDict()
+    cfg.model_name = 'UNet_n2n_un'
+    cfg.model_args = {'in_channels': ch, 'out_channels': ch}
+    net = build_model(cfg)
+
     net = torch.nn.DataParallel(net)
     net = net.cuda()
     net.load_state_dict(torch.load(args.model_path))
