@@ -78,8 +78,22 @@ idr_config = yaml2edict('./configs/IDR.yaml')
 
 name = 'idr-g'  # idr; Gaussian noise
 generateConfig(name, {
-    'noise_type': 'g'
+    'noise_type': 'g',
+    'noise_level': [0, 50],
 }, idr_config)
+
+name = 'idr-line'  # idr; line noise
+generateConfig(name, {
+    'noise_type': 'line',
+    'noise_level': 5,
+}, idr_config)
+
+for item in ['binomial', 'impulse']:
+    name = 'idr-' + item
+    generateConfig(name, {
+        'noise_type': item,
+        'noise_level': 0.95,
+    }, idr_config)
 
 name = 'n2n-g'  # n2n; Gaussian noise
 generateConfig(name, {

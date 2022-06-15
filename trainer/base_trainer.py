@@ -150,8 +150,12 @@ class Base_trainer():
 
             if (cur_iter % self.cfg.save_img_freq == 1) or cur_iter in \
                     [self.cfg.total_iter] + [5 * (2 ** i) for i in range(9)]:
-                save_img(self.cfg.result_dir, 'epoch_%d_s%d_%s.jpg' % (self.epoch, cur_iter, self.cfg.name),
-                         self.input, self.output, self.gt, rgb=True)
+                if self.cfg.zero_mean:
+                    save_img(self.cfg.result_dir, 'epoch_%d_s%d_%s.jpg' % (self.epoch, cur_iter, self.cfg.name),
+                             self.input + 0.5, self.output + 0.5, self.gt + 0.5, rgb=True)
+                else:
+                    save_img(self.cfg.result_dir, 'epoch_%d_s%d_%s.jpg' % (self.epoch, cur_iter, self.cfg.name),
+                             self.input, self.output, self.gt, rgb=True)
 
             if (cur_iter % self.cfg.save_state_freq == 1) or cur_iter == self.cfg.total_iter:
                 self.save_training_state()
@@ -269,6 +273,9 @@ class DenoiseBase_fastIDR(Base_trainer):
                 self.gt = self.net_copy(noisy)
 
         self.input, _, _ = add_noise(self.gt, self.cfg)
+
+
+# todo: training mask for n2v and n2s
 
 
 @TRAINER_REGISTRY.register()

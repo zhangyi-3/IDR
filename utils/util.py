@@ -264,16 +264,16 @@ def get_experiment_noise_conv(noise_type: str, noise_var: float, realization: in
 
 def add_noise(input_var, cfg, *args):
     noise_type = cfg.noise_type
+    noise_level = cfg.noise_level
     assert input_var.is_cuda
 
-    if noise_type[0] == 'g':
-        if noise_type == 'g':  # random noise level
-            sigma = np.random.uniform(0, 50, size=input_var.shape[0])
+    if noise_type == 'g':
+        if isinstance(noise_level, list):  # random noise level
+            sigma = np.random.uniform(noise_level[0], noise_level[1], size=input_var.shape[0])
             cfg.temp_sigma = 'g' + str(sigma)
             sigma = sigma / 255.0
-
         else:
-            sigma = [float(noise_type[1:]) / 255.0]
+            assert NotImplementedError
 
         if not cfg.mixed_batch_nl:
             noise = torch.cuda.FloatTensor(input_var.shape).normal_(0, sigma[0])
@@ -282,8 +282,26 @@ def add_noise(input_var, cfg, *args):
             for idx in range(input_var.shape[0]):
                 noise[idx].normal_(0, sigma[idx])
         input_noise = input_var + noise
-
         return input_noise.float(), sigma, None
+
+    elif noise_type == 'line':
+        sigma = noise_level / 255.0
+        b, c, h, w = input_var.shape
+        line_noise = torch.cuda.FloatTensor(b, 1, h, 1).normal_(0, sigma)
+        input_noise = input_var + torch.cuda.FloatTensor(input_var.shape).fill_(1) * line_noise
+        return input_noise.float(), sigma, None
+
+    elif noise_type in ['binomial', 'impulse']:
+        sigma = noise_level
+        b, c, h, w = input_var.shape
+        mask_shape = (b, 1, h, w) if noise_type == 'binomial' else (b, c, h, w)
+        mask = torch.cuda.FloatTensor(*mask_shape).uniform_(0, 1)
+        mask = mask * torch.cuda.FloatTensor(b, 1, 1, 1).uniform_(0, sigma)  # add different noise level for each frame
+        mask = 1 - torch.bernoulli(mask)
+        input_noise = input_var * mask
+        return input_noise.float(), sigma, None
+    else:
+        assert NotImplementedError
 
 
 def scandir(dir_path, suffix=None, recursive=False, full_path=False):

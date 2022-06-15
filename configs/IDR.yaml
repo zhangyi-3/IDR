@@ -69,6 +69,7 @@ dataset:
 zero_mean: True
 
 noise_type: g
+noise_level: [0, 50]
 mixed_batch_nl: False
 
 temp: {}
