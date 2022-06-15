@@ -75,7 +75,14 @@ def generateConfig(pre_name, cons, init_cfg):
 
 
 idr_config = yaml2edict('./configs/IDR.yaml')
-name = 'idr-g'
+
+name = 'idr-g'  # idr; Gaussian noise
 generateConfig(name, {
     'noise_type': 'g'
+}, idr_config)
+
+name = 'n2n-g'  # n2n; Gaussian noise
+generateConfig(name, {
+    'noise_type': 'g',
+    'trainer.name': 'DenoiseBase_n2n',
 }, idr_config)

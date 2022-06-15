@@ -269,3 +269,24 @@ class DenoiseBase_fastIDR(Base_trainer):
                 self.gt = self.net_copy(noisy)
 
         self.input, _, _ = add_noise(self.gt, self.cfg)
+
+
+@TRAINER_REGISTRY.register()
+class DenoiseBase_n2n(Base_trainer):
+    def __init__(self, cfg, train=True):
+        super(DenoiseBase_n2n, self).__init__(cfg, train)
+
+    def preprocess(self, data):
+        if isinstance(data, dict):
+            clean = data['gt']
+        else:
+            clean = data[1]
+
+        clean = clean.permute(0, 3, 1, 2)
+        noisy, _, _ = add_noise(clean, self.cfg)
+
+        if self.cfg.zero_mean:
+            clean, noisy = clean - 0.5, noisy - 0.5
+
+        self.input, _, _ = add_noise(clean, self.cfg)
+        self.gt = noisy
