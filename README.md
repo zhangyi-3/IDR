@@ -1,36 +1,38 @@
-[IDR: Self-Supervised Image Denoising via Iterative Data Refinement](http://arxiv.org/abs/2111.14358)
----
+# IDR: Self-Supervised Image Denoising via Iterative Data Refinement
+
 [Yi Zhang](https://zhangyi-3.github.io/)<sup>1</sup>,
 [Dasong Li]()<sup>1</sup>,
 [Ka Lung Law]()<sup>2</sup>,
 [Xiaogang Wang](https://scholar.google.com/citations?user=-B5JgjsAAAAJ&hl=zh-CN)<sup>1</sup>,
 [Hongwei Qin](https://scholar.google.com/citations?user=ZGM7HfgAAAAJ&hl=en)<sup>2</sup>,
 [Hongsheng Li](https://www.ee.cuhk.edu.hk/~hsli/)<sup>1</sup><br>
-
 <sup>1</sup>CUHK-SenseTime Joint Lab, <sup>2</sup>SenseTime Research
 
+---
+
+[![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](http://arxiv.org/abs/2111.14358)
+
+This repository is the official PyTorch implementation of [IDR](http://arxiv.org/abs/2111.14358). 
+It also includes some personal implementations of well-known unsupervised image denoising methods ([N2N](https://github.com/NVlabs/noise2noise), etc).
 
 
-### Abstract
+### Training
+Slurm Training. Find the config name in [configs/synthetic_config.py](configs/synthetic_config.py).
+```
+sh run_slurm.sh -n config_name
 
-> The lack of large-scale noisy-clean image pairs restricts the supervised denoising methods' deployment
-in actual applications. While existing unsupervised methods are able to learn image denoising without 
-ground-truth clean images, they either show poor performance or work under impractical settings 
-(e.g., paired noisy images). In this paper, we present a practical unsupervised image denoising method 
-to achieve state-of-the-art denoising performance. Our method only requires single noisy images and a 
-noise model, which is easily accessible in practical raw image denoising. It performs two steps 
-iteratively: (1) Constructing noisier-noisy dataset with random noise from the noise model; 
-(2) training a model on the noisier-noisy dataset and using the trained model to refine noisy images 
-as the targets used in the next round. We further approximate our full iterative method with a fast 
-algorithm for more efficient training while keeping its original high performance. Experiments on 
-real-world noise, synthetic noise, and correlated noise show that our proposed unsupervised denoising 
-approach has superior performances to existing unsupervised methods and competitive performance with 
-supervised methods. In addition, we argue that existing denoising datasets are of low quality and 
-contain only a small number of scenes. To evaluate raw images denoising performance in real-world 
-applications, we build a high-quality raw image dataset SenseNoise-500 that contains 
-500 real-life scenes. The dataset can serve as a strong benchmark for better evaluating raw image 
-denoising.
+Example of training IDR for Gaussian denoising:
+sh run_slurm.sh -n idr-g
+```
 
+### SenseNoise dataset
+[Download](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155135732_link_cuhk_edu_hk/ER9Zn20NM5JCs2LtWnJjS88BOnuSOIl69EGvpdUe7t3BIw?e=r0LtAy)
+
+The released dataset is what we used in our paper. 
+Thanks to the advice from the anonymous reviewers, we are still working on improving the quality of the dataset.
+
+
+ 
 ### Testing
 The code has been tested with the following environment:
 ```
@@ -47,20 +49,6 @@ scipy == 1.4.1
 python -u test.py --root your_data_root --ntype gaussian 
 ```
 
-### SenseNoise dataset
-[Download](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155135732_link_cuhk_edu_hk/ER9Zn20NM5JCs2LtWnJjS88BOnuSOIl69EGvpdUe7t3BIw?e=r0LtAy)
-
-The released dataset is what we used in our paper. 
-Thanks to the advice from the anonymous reviewers, we are still working on improving the quality of the dataset.
-
-
-### Training code
-Slurm Training for gaussian denoising
-```
-sh run_slurm.sh -n idr-g
-```
-
-
 ### Citation
 ``` bibtex
 @inproceedings{zhang2021IDR,
@@ -75,6 +63,4 @@ sh run_slurm.sh -n idr-g
 Feel free to contact zhangyi@link.cuhk.edu.hk if you have any questions.
 
 ### Acknowledgments
-* [N2N](https://github.com/NVlabs/noise2noise)
-* [N2V](https://github.com/juglab/n2v)
-* [bm3d](https://pypi.org/project/bm3d/)
+* [N2N](https://github.com/NVlabs/noise2noise), [N2V](https://github.com/juglab/n2v),  [bm3d](https://pypi.org/project/bm3d/), [basicsr](https://github.com/XPixelGroup/BasicSR)
