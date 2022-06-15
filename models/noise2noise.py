@@ -1,9 +1,12 @@
 import torch
 import torch.nn as nn
 
+from utils.registry import ARCH_REGISTRY
 
+
+@ARCH_REGISTRY.register()
 class UNet_n2n_un(nn.Module):
-    def __init__(self, in_channels=3, out_channels=3):
+    def __init__(self, in_channels=4, out_channels=4):
         super(UNet_n2n_un, self).__init__()
 
         self.en_block1 = nn.Sequential(
@@ -99,4 +102,29 @@ class UNet_n2n_un(nn.Module):
         upsample1 = self.de_block4(concat2)
         concat1 = torch.cat((upsample1, x), dim=1)
         out = self.de_block5(concat1)
+
         return out
+
+
+@ARCH_REGISTRY.register()
+class UNet_n2n_un_gray(UNet_n2n_un):
+    def __init__(self, in_channels=1, out_channels=1):
+        super(UNet_n2n_un_gray, self).__init__(in_channels, out_channels)
+
+
+@ARCH_REGISTRY.register()
+class UNet_n2n_un_srgb(UNet_n2n_un):
+    def __init__(self, in_channels=3, out_channels=3):
+        super(UNet_n2n_un_srgb, self).__init__(in_channels, out_channels)
+
+
+if __name__ == '__main__':
+    from thop import profile
+
+    model = UNet_n2n_un_srgb()
+    input = torch.randn(1, 3, 224, 224)
+    flops, params = profile(model, inputs=(input,), verbose=False)
+    print('flops %.2e params %.2e' % (flops, params))
+    print('flops %.1fG params %.1fM ' % (flops / (1024 ** 3), params / (1024 ** 2)))
+
+    # flops 8.76e+09 parames 9.91e+05

@@ -1,0 +1,74 @@
+name: ~
+mode: quick_iter
+model_dir: ~
+result_dir: ~
+resume: True
+cur_iter: 0
+
+
+# training parameters
+
+opt: adam
+lr: !!float 3e-4
+wd: 0
+seed: ~
+loss_type: l1
+clip_norm: ~
+
+model_name: UNet_n2n_un
+model_args:
+  in_channels: 3
+  out_channels: 3
+
+# no checking for the second folder parameters
+# if the coder write wrong parameters, the config would be rejected by the initial function
+find_unused_params: False
+schedule: cosine
+schedule_args: {}
+
+
+# dist training settings
+dist: True
+dist_type: slurm
+dist_params:
+  backend: nccl
+  port: 29502
+
+
+train_dataset: Imagefolder
+prefetcher: CUDAPrefetcher
+
+#
+print_freq: 10
+save_freq: 100000
+save_state_freq: 3000
+save_img_freq: 30000
+total_iter: 500000
+
+
+trainer:
+  name: DenoiseBase_fastIDR
+  ema_decay: -1
+
+
+dataset:
+  train:
+    path: /mnt/lustre/share/images/val
+    crop_size: 256
+    batch_size_per_gpu: ~
+    total_bs: 4
+    worker_num: 1  #
+    aug: False
+    repeat: 1
+    sample_ratio: 1
+    mc: True
+    preload: False
+    img_range: 1.
+
+
+zero_mean: True
+
+noise_type: g
+mixed_batch_nl: False
+
+temp: {}
