@@ -6,9 +6,7 @@ import io
 import numpy as np
 
 from torch.utils.data import Dataset
-
 from PIL import Image
-
 from utils.registry import DATASET_REGISTRY
 
 try:
@@ -80,7 +78,7 @@ class MemcachedBase(Dataset):
 
 @DATASET_REGISTRY.register()
 class Imagefolder(MemcachedBase):
-    def __init__(self, path,  **kwargs):
+    def __init__(self, path, **kwargs):
         self.root_dir = path  # root_dir
         self.size = kwargs['crop_size']
         self.repeat = int(kwargs['repeat'])
@@ -88,7 +86,6 @@ class Imagefolder(MemcachedBase):
         self.aug = kwargs['aug']
         self.preload = kwargs['preload']
         self.img_range = kwargs['img_range']
-
 
         self.rank = int(os.environ.get('SLURM_PROCID', default=0))
 

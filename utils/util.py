@@ -1,4 +1,3 @@
-import numpy as np
 from scipy.fftpack import fft2, ifft2, fftshift, ifftshift
 from scipy.signal import fftconvolve
 from bm3d import gaussian_kernel
@@ -7,6 +6,9 @@ import torch
 import random, shutil, datetime
 import os, cv2, traceback, math
 import os.path as osp
+import numpy as np
+
+from multiprocessing.pool import ThreadPool
 
 
 class EasyDict(dict):
@@ -299,6 +301,29 @@ def add_noise(input_var, cfg, *args):
         mask = mask * torch.cuda.FloatTensor(b, 1, 1, 1).uniform_(0, sigma)  # add different noise level for each frame
         mask = 1 - torch.bernoulli(mask)
         input_noise = input_var * mask
+        return input_noise.float(), sigma, None
+
+    elif 'scn' in noise_type:  # spatially correlated noise
+        sigma = noise_level / 255.0
+        b, c, h, w = input_var.shape
+        input_noise = input_var.clone()
+        n_type = int(noise_type.split('-')[-1])
+
+        def img_add_noise(img, n_type, sigma, h, w):
+            one_image_noise, _, _ = get_experiment_noise('g%d' % n_type, sigma, np.random.randint(1e9), (h, w, 3))
+            one_image_noise = torch.FloatTensor(one_image_noise).cuda().permute(2, 0, 1)
+            img = img + one_image_noise
+            return img
+
+        pool = ThreadPool(processes=4 if b >= 4 else b)
+        result = []
+        for i in range(b):  # no need to
+            result.append(pool.apply_async(img_add_noise, (input_var[i], n_type, sigma, h, w)))
+        pool.close()
+        pool.join()
+        for i, res in enumerate(result):
+            input_noise[i] = res.get()
+
         return input_noise.float(), sigma, None
     else:
         assert NotImplementedError

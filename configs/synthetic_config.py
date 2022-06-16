@@ -2,23 +2,9 @@ import os, yaml
 import copy
 import operator
 
+from utils import EasyDict
+
 cfgs = {}
-
-
-class EasyDict(dict):
-    """Convenience class that behaves like a dict but allows access with the attribute syntax."""
-
-    def __getattr__(self, name: str):
-        try:
-            return self[name]
-        except KeyError:
-            raise AttributeError(name)
-
-    def __setattr__(self, name: str, value) -> None:
-        self[name] = value
-
-    def __delattr__(self, name: str) -> None:
-        del self[name]
 
 
 def dict2EdictRecursion(naive_dict):
@@ -88,11 +74,18 @@ generateConfig(name, {
     'noise_level': 5,
 }, idr_config)
 
-for item in ['binomial', 'impulse']:
+for item in ['binomial', 'impulse']:  # idr; binomial and impulse noise
     name = 'idr-' + item
     generateConfig(name, {
         'noise_type': item,
         'noise_level': 0.95,
+    }, idr_config)
+
+for item in range(1, 5):  # idr; spatially correlated noise 1~4
+    name = 'idr-scn%d' % item
+    generateConfig(name, {
+        'noise_type': 'scn-%d' % item,
+        'noise_level': 5,
     }, idr_config)
 
 name = 'n2n-g'  # n2n; Gaussian noise
