@@ -311,7 +311,7 @@ def add_noise(input_var, cfg, *args):
 
         def img_add_noise(img, n_type, sigma, h, w):
             one_image_noise, _, _ = get_experiment_noise('g%d' % n_type, sigma, np.random.randint(1e9), (h, w, 3))
-            one_image_noise = torch.FloatTensor(one_image_noise).cuda().permute(2, 0, 1)
+            one_image_noise = torch.FloatTensor(one_image_noise).to(img.device).permute(2, 0, 1)  # for dist training
             img = img + one_image_noise
             return img
 
