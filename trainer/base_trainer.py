@@ -1,16 +1,15 @@
 import torch
-import torch.nn.functional as F
-import numpy as np
 import time
 import os
-import cv2
+
+import numpy as np
 
 from collections import deque
 # from tensorboardX import SummaryWriter
 
-import utils
-from utils.registry import TRAINER_REGISTRY
+
 from models import build_model
+from utils.registry import TRAINER_REGISTRY
 from utils import add_noise, save_img, basic_loss
 
 
@@ -275,9 +274,6 @@ class DenoiseBase_fastIDR(Base_trainer):
         self.input, _, _ = add_noise(self.gt, self.cfg)
 
 
-# todo: training mask for n2v and n2s
-
-
 @TRAINER_REGISTRY.register()
 class DenoiseBase_n2n(Base_trainer):
     def __init__(self, cfg, train=True):
@@ -297,3 +293,66 @@ class DenoiseBase_n2n(Base_trainer):
 
         self.input, _, _ = add_noise(clean, self.cfg)
         self.gt = noisy
+
+
+@TRAINER_REGISTRY.register()
+class DenoiseBase_n2c(Base_trainer):
+    def __init__(self, cfg, train=True):
+        super(DenoiseBase_n2c, self).__init__(cfg, train)
+
+    def preprocess(self, data):
+        if isinstance(data, dict):
+            clean = data['gt']
+        else:
+            clean = data[1]
+
+        clean = clean.permute(0, 3, 1, 2)
+        noisy, _, _ = add_noise(clean, self.cfg)
+
+        if self.cfg.zero_mean:
+            clean, noisy = clean - 0.5, noisy - 0.5
+
+        self.input = noisy
+        self.gt = clean
+
+
+# todo: training mask for n2v and n2s
+@TRAINER_REGISTRY.register()
+class DenoiseBase_mask(Base_trainer):
+    def __init__(self, cfg, train=True):
+        super(DenoiseBase_mask, self).__init__(cfg, train)
+
+    def preprocess(self, data):
+        if isinstance(data, dict):
+            clean = data['gt']
+        else:
+            clean = data[1]
+
+        clean = clean.permute(0, 3, 1, 2)
+        noisy, _, _ = add_noise(clean, self.cfg)
+
+        if self.cfg.zero_mean:
+            clean, noisy = clean - 0.5, noisy - 0.5
+
+        self.input, _, _ = add_noise(clean, self.cfg)
+        self.gt = noisy
+
+    def optimize_parameters(self):
+        self.optimizer.zero_grad()
+        self.output = self.net(self.input)
+
+        loss = basic_loss(self.output, self.gt, type=self.cfg.loss_type)
+
+        loss.backward()
+
+        # psnr = 0  # get_criterion(loss)
+        if self.cfg.clip_norm is not None:
+            torch.nn.utils.clip_grad_norm_(self.net.parameters(), self.cfg.clip_norm)
+
+        self.optimizer.step()
+        self.print_iter_info(loss, 0)
+
+        if self.ema_decay > 0:
+            self.model_ema(decay=self.ema_decay)
+
+        return loss

@@ -93,3 +93,9 @@ generateConfig(name, {
     'noise_type': 'g',
     'trainer.name': 'DenoiseBase_n2n',
 }, idr_config)
+
+name = 'n2c-g'  # n2c; Gaussian noise
+generateConfig(name, {
+    'noise_type': 'g',
+    'trainer.name': 'DenoiseBase_n2c',
+}, idr_config)
