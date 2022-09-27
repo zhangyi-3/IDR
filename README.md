@@ -26,7 +26,8 @@ sh run_slurm.sh -n idr-g
 ```
 
 ### SenseNoise dataset
-[Download](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155135732_link_cuhk_edu_hk/ER9Zn20NM5JCs2LtWnJjS88BOnuSOIl69EGvpdUe7t3BIw?e=r0LtAy)
+Downloads [Drive](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155135732_link_cuhk_edu_hk/ER9Zn20NM5JCs2LtWnJjS88BOnuSOIl69EGvpdUe7t3BIw?e=r0LtAy) | 
+[Baidu Netdisk](https://pan.baidu.com/s/1PtqQjGecr24iNwUQ7na1EQ?pwd=05pj)
 
 The released dataset is what we used in our paper. 
 Thanks to the advice from the anonymous reviewers, we are still working on improving the quality of the dataset.
