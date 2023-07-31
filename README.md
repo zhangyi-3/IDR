@@ -15,6 +15,21 @@
 This repository is the official PyTorch implementation of [IDR](http://arxiv.org/abs/2111.14358). 
 It also includes some personal implementations of well-known unsupervised image denoising methods ([N2N](https://github.com/NVlabs/noise2noise), etc).
 
+### Update
+- 2023.08.01: We release the sensenoise dataset v4, which contains both Raw images, sRGB images and meta information (e.g. lens shading, ccm).
+
+### SenseNoise dataset
+V4 Downloads: Raw ([OneDrive](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155135732_link_cuhk_edu_hk/EcNkekJf0DJNvBetxIzbKx8BErBLISaGuPiv9nZIROy1wQ?e=ADH2EK))
+| sRGB ([OneDrive](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155135732_link_cuhk_edu_hk/EZ9pOwcr9XJLj2UpbQ8ccF4BAjeRhcNwg-SkdAPTrNiCtA?e=Mw7D22))
+| meta ([OneDrive](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155135732_link_cuhk_edu_hk/EcIgWEHtKrhNj02vwyqhnNkBX3pCwr6pQYsZnlNZiWa_vw?e=pWLjkU))
+
+
+V3 Downloads: [OneDrive](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155135732_link_cuhk_edu_hk/ER9Zn20NM5JCs2LtWnJjS88BOnuSOIl69EGvpdUe7t3BIw?e=r0LtAy) 
+| [Baidu Netdisk](https://pan.baidu.com/s/1PtqQjGecr24iNwUQ7na1EQ?pwd=05pj)
+
+Thanks to the advice from the anonymous reviewers, we are still working on improving the quality of the dataset.
+
+
 
 ### Training
 Slurm Training. Find the config name in [configs/synthetic_config.py](configs/synthetic_config.py).
@@ -24,14 +39,6 @@ sh run_slurm.sh -n config_name
 Example of training IDR for Gaussian denoising:
 sh run_slurm.sh -n idr-g
 ```
-
-### SenseNoise dataset
-Downloads [Drive](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155135732_link_cuhk_edu_hk/ER9Zn20NM5JCs2LtWnJjS88BOnuSOIl69EGvpdUe7t3BIw?e=r0LtAy) | 
-[Baidu Netdisk](https://pan.baidu.com/s/1PtqQjGecr24iNwUQ7na1EQ?pwd=05pj)
-
-The released dataset is what we used in our paper. 
-Thanks to the advice from the anonymous reviewers, we are still working on improving the quality of the dataset.
-
 
  
 ### Testing
