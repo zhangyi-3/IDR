@@ -52,7 +52,7 @@ scipy == 1.4.1
 ```
     
 - Prepare the datasets. (kodak | BSDS300 | BSD68)
-- Download the [pretrained models](https://mycuhk-my.sharepoint.com/:f:/g/personal/1155135732_link_cuhk_edu_hk/Ep0gRwX0hIFKvOSiq5x1QbsBfSmGma1CNxQ8LeMiE93wEw?e=dJxcx3)
+- Download the [pretrained models](https://pan.baidu.com/s/19Lv9bxRIhWnshqPEQAUdVQ?pwd=6uaz)
  and put them into the checkpoint folder.
 - Modify the data root path and noise type (gaussian | gaussian_gray | line | binomial | impulse | pattern).
 ```
